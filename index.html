@@ -1,0 +1,469 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>IDA學測英文之屌逼逼自創網頁 &gt;^ω^&lt;</title>
+<style>
+:root{--pink:#f4b8c8;--pink2:#ffe5ec;--yellow:#fff1c7;--navy:#536982;--cream:#fffdf6;--ink:#283342;--muted:#667085;--green:#dcefe4}
+*{box-sizing:border-box}
+body{margin:0;background:linear-gradient(135deg,#fff5f7,#fff8df);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","Noto Sans TC",sans-serif;color:var(--ink);font-size:16px;font-weight:500}
+main{max-width:900px;margin:auto;padding:20px 14px 40px}
+header{background:var(--cream);border:2px solid var(--pink);border-radius:22px;padding:20px;text-align:center;box-shadow:0 5px 18px #53698212}
+h1{margin:0 auto 8px;color:var(--navy);font-size:clamp(22px,5vw,34px);line-height:1.35;max-width:100%;overflow:visible;overflow-wrap:anywhere;word-break:normal}.title-face{display:inline-block;white-s[...]
+.sub{color:var(--muted);margin:0}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:9px;margin:14px 0}
+.stat{background:var(--yellow);border-radius:14px;padding:12px;text-align:center}
+.stat strong{display:block;font-size:22px;color:var(--navy)}
+nav{display:flex;flex-wrap:wrap;gap:8px;margin:14px 0}
+button,select{font:inherit;border:0;border-radius:12px;padding:11px 14px;cursor:pointer}
+button{background:var(--navy);color:white}
+button.secondary{background:var(--pink2);color:var(--navy);border:1px solid var(--pink)}
+button:disabled{opacity:.45;cursor:not-allowed}
+.panel{background:var(--cream);border:1px solid #eadfe1;border-radius:20px;padding:18px;margin-top:12px;box-shadow:0 4px 14px #5369820b}
+.label{color:var(--muted);font-size:13px;font-weight:700;letter-spacing:.04em}
+.word{font-size:clamp(30px,7vw,44px);font-weight:800;color:var(--navy);margin:8px 0 4px;overflow-wrap:anywhere}
+.pron{color:var(--muted);font-size:15px}
+.meaning{font-size:22px;font-weight:700;margin:12px 0;color:#9d536b}
+.example{background:#fff5dc;border-radius:12px;padding:12px;line-height:1.6;margin:12px 0}
+.options{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:14px}
+.options button{background:white;color:var(--ink);border:1.5px solid #d8dfe7;text-align:left;min-height:54px}
+.options button:hover{border-color:var(--navy);background:#f2f6fa}
+.options button.correct{background:#e1f3e7;border-color:#65a47b}
+.options button.wrong{background:#ffe6e9;border-color:#d9798d}
+.feedback{margin-top:14px;padding:13px;border-radius:12px;line-height:1.6;background:#f4f6fa}
+.hidden{display:none!important}
+input{color:var(--ink)}
+#wrongSubContent .panel{margin-top:10px}
+#wrongSubContent li{margin:8px 0;line-height:1.55}
+.row{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.small{font-size:14px;color:var(--muted)}
+.listitem{border-bottom:1px solid #eee;padding:12px 0;display:flex;justify-content:space-between;gap:10px;align-items:center}
+.listitem:last-child{border-bottom:0}
+.listitem strong{color:var(--navy);font-size:18px}
+footer{text-align:center;color:var(--muted);font-size:12px;margin-top:20px;line-height:1.7}
+.auth-overlay{position:fixed;inset:0;z-index:999;background:#1d2738a8;display:flex;align-items:center;justify-content:center;padding:14px;overflow:auto}
+.auth-modal{position:relative;background:var(--cream);border:2px solid var(--pink);border-radius:20px;padding:22px 18px 18px;width:min(100%,520px);max-height:90vh;overflow:auto;box-shadow:0 15px 50px #0003}
+.auth-close{position:absolute;right:12px;top:12px;padding:7px 10px}
+.auth-modal h2{color:var(--navy);padding-right:42px;margin-top:0}
+.auth-modal label{display:block;font-weight:700;font-size:14px;margin:12px 0 5px}
+.auth-modal input{width:100%;padding:12px;border:1px solid #e0c6ce;border-radius:11px;font:inherit;background:white}
+.auth-modal .notice{background:#fff1c7;border-radius:12px;padding:12px;line-height:1.6;margin:12px 0}
+.auth-modal .error{color:#d21f3c;font-weight:700;font-size:14px;margin:5px 0}
+.auth-modal .preview{font-size:18px;font-weight:800;color:var(--navy);margin:6px 0}
+.auth-modal .auth-actions{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}
+.auth-modal .auth-actions button{flex:1;min-width:110px}
+
+.topbar{max-width:900px;margin:0 auto;padding:10px 14px 0;display:flex;justify-content:space-between;align-items:center;gap:10px}
+.home-link{background:var(--cream);color:var(--navy);border:1px solid var(--pink);padding:6px 8px;font-size:12px;line-height:1.15;font-weight:700;white-space:nowrap;word-break:keep-all;min-width:max-content}
+.gear-btn{width:44px;height:44px;padding:0;display:grid;place-items:center;font-size:23px;background:var(--cream);color:var(--navy);border:1px solid var(--pink);border-radius:14px}
+.home-dashboard{display:grid;gap:12px}
+.dashboard-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+.clock-card,.countdown-card{background:#fff8e7;border:1px solid #f1dfad;border-radius:15px;padding:14px;min-width:0}
+.clock-card strong,.countdown-card strong{display:block;font-size:clamp(17px,3.5vw,24px);color:var(--navy);margin:8px 0;overflow-wrap:anywhere}
+.countdown-card{background:#ffe8ee;border-color:#f3c2d0}
+.quote-card{background:#fffdf9;border-left:4px solid var(--pink);border-radius:12px;padding:12px 15px}
+.quote-card p{margin:3px 0 8px;line-height:1.55}.quote-zh{font-weight:800;color:var(--navy)}.quote-en{font-style:italic;color:#9d536b}
+#homeConfirmOverlay{position:fixed;inset:0;z-index:1000;background:#1d2738a8;display:flex;align-items:center;justify-content:center;padding:16px}
+.confirm-card{width:min(100%,390px);background:var(--cream);border:2px solid var(--pink);border-radius:20px;padding:22px;text-align:center;box-shadow:0 15px 50px #0003}
+.exam-days{font-size:clamp(27px,5vw,36px)!important;line-height:1.2}.exam-clock{font-size:12px!important;font-weight:500;letter-spacing:.02em}.countdown-card .label{display:block}.confirm-card h2{font-size:1.45rem;color:var(--navy);margin-top:0;margin-bottom:12px}
+@media(max-width:520px){.dashboard-grid{grid-template-columns:1fr}.clock-card,.countdown-card{padding:12px}.topbar{padding-top:8px}main{padding-top:12px}header{padding:18px 10px}h1{font-size:clamp(21px,5vw,30px)}.auth-modal{padding:20px 14px 14px}.options{grid-template-columns:1fr}.stats{gap:6px}.stat{padding:10px 4px}.stat strong{font-size:19px}.panel{padding:14px}}
+
+body::before{content:'IDA”UTOPIA';position:fixed;left:50%;top:50%;transform:translate(-50%,-50%) rotate(-18deg);font-size:clamp(42px,12vw,150px);font-weight:900;letter-spacing:.04em;color:#e9a0b6;opacity:.12;pointer-events:none;z-index:0}
+main,.topbar{position:relative;z-index:1}
+#compactBrand{display:none;color:#d889a1;font-size:13px;font-weight:800;letter-spacing:.09em;text-align:left;line-height:1.4}
+body.quiz-active header{background:transparent;border:0;box-shadow:none;border-radius:0;padding:3px 0;margin:0;text-align:left}
+body.quiz-active header h1,body.quiz-active header .sub{display:none}
+body.quiz-active #compactBrand{display:block}
+body.quiz-active main{padding-top:6px}
+body.quiz-active .stats{margin-top:7px}
+body.quiz-active #dictionaryStatus{display:none}
+@media(max-width:520px){body::before{font-size:clamp(34px,11vw,70px);letter-spacing:0}body.quiz-active main{padding-top:4px}}
+
+main{padding:12px 12px 24px}
+header{padding:14px 16px;border-radius:18px}
+.sub{font-size:14px}
+.stats{gap:7px;margin:9px 0}
+.stat{padding:8px 5px;border-radius:12px}
+.stat strong{font-size:20px}
+nav{gap:7px;margin:9px 0}
+button,select{padding:10px 12px;min-height:42px;border-radius:11px}
+.panel{padding:14px;margin-top:9px;border-radius:16px}
+.topbar{padding:7px 12px 0}
+.home-dashboard{gap:8px}
+.dashboard-grid{gap:8px}
+.clock-card,.countdown-card{padding:10px}
+.clock-card strong,.countdown-card strong{margin:5px 0}
+.quote-card{padding:9px 12px}
+footer{margin-top:12px}
+#guestConfirmOverlay{position:fixed;inset:0;z-index:1100;display:flex;align-items:center;justify-content:center;padding:16px;background:#1d2738b8;overflow-y:auto;overscroll-behavior:contain}
+#guestConfirmOverlay.hidden{display:none!important}
+#guestConfirmOverlay .confirm-card{margin:auto;max-height:calc(100dvh - 32px);overflow-y:auto;width:min(100%,390px);padding:20px 16px}
+#guestConfirmOverlay .confirm-actions{flex-wrap:wrap}
+#guestConfirmOverlay .confirm-actions button{flex:1 1 135px;min-width:0;min-height:44px}
+@media(max-width:520px){main{padding:8px 10px 20px}header{padding:12px 10px}.dashboard-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.countdown-card{grid-column:1/-1}.clock-card,.countdown-card{padding:9px}.stats{gap:5px;margin:7px 0}.stat{padding:7px 3px}.stat strong{font-size:18px}nav button{flex:1 1 calc(50% - 7px)}.panel{padding:12px;margin-top:8px}.options{gap:8px}.options button{min-height:48px;padding:10px 11px}.word{margin:5px 0 2px}.example{padding:10px;margin:8px 0}.confirm-card{padding:18px 14px}}
+
+body{background-color:#fff8fa;background-image:linear-gradient(135deg,rgba(255,245,248,.97),rgba(255,251,239,.96)),repeating-linear-gradient(120deg,transparent 0 72px,rgba(83,105,130,.055) 73px 74px,transparent 75px 147px),linear-gradient(180deg,#fff7fb,#fffdf8)}
+body::before{content:none!important}
+.watermark-layer{position:fixed;inset:0;overflow:hidden;pointer-events:none;z-index:0}
+.watermark-layer span{position:absolute;display:block;white-space:nowrap;font-size:clamp(34px,7vw,88px);font-weight:900;letter-spacing:.09em;color:#d98da7;opacity:.105;transform:rotate(-17deg)}
+.watermark-layer span:nth-child(1){top:7%;left:-3%}
+.watermark-layer span:nth-child(2){top:36%;right:-8%}
+.watermark-layer span:nth-child(3){top:66%;left:4%}
+.watermark-layer span:nth-child(4){top:91%;right:9%}
+main,.topbar{position:relative;z-index:1}
+#compactBrand{display:block!important;text-align:center!important;font-size:12px!important;letter-spacing:.14em!important;color:#d889a1!important;margin:0 auto 8px!important}
+header #compactBrand{width:100%}
+body.quiz-active header{text-align:center}
+body.quiz-active #compactBrand{display:block!important;text-align:center!important}
+body:not(.quiz-active) #homeBtn{display:none!important}
+button,button.secondary{background:#ffe5ec!important;color:#536982!important;border:1px solid #f4c3d1!important;transition:background-color .16s ease,border-color .16s ease,transform .16s ease}
+button:active{transform:translateY(1px)}
+nav button.active,button.active,.options button.selected{background:#dce5ef!important;border-color:#9fb2c8!important;color:#354b63!important}
+.options button{background:#ffe5ec!important;border-color:#f4c3d1!important;color:#536982!important}
+.options button.correct{background:#e1f3e7!important;border-color:#65a47b!important;color:#283342!important}
+.options button.wrong{background:#ffe6e9!important;border-color:#d9798d!important;color:#283342!important}
+.options button.wrong,.options button.wrong.selected{background:#ffccd2!important;border-color:#d94b60!important;color:#7f1020!important}
+.spell-preview{font-size:clamp(29px,7vw,43px);font-weight:800;letter-spacing:.17em;line-height:1.35;text-align:center;color:#536982;min-height:1.45em;margin:8px 0 12px;overflow-wrap:anywhere}
+#spellInput{margin-top:5px!important;text-align:center;letter-spacing:.08em;background:rgba(255,255,255,.92)}
+@media(max-width:520px){.watermark-layer span{font-size:clamp(28px,8vw,48px);letter-spacing:.06em}.watermark-layer span:nth-child(1){top:9%;left:-12%}.watermark-layer span:nth-child(2){top:37%;right:-12%}.watermark-layer span:nth-child(3){top:67%;left:-8%}.watermark-layer span:nth-child(4){top:91%;right:-11%}}
+
+body{background-image:linear-gradient(135deg,rgba(255,245,248,.91),rgba(255,251,239,.91)),repeating-linear-gradient(120deg,transparent 0 78px,rgba(83,105,130,.075) 79px 80px,transparent 81px 156px),linear-gradient(180deg,#fff8fa,#fffaf4)}
+.topbar{display:grid!important;grid-template-columns:minmax(0,1fr) auto minmax(0,1fr)!important;align-items:center!important;gap:8px!important;min-height:42px}
+#topBrand{grid-column:2;grid-row:1;text-align:center;white-space:nowrap;font-size:12px;font-weight:850;letter-spacing:.14em;color:#d889a1;line-height:1.25}
+#homeBtn{grid-column:1;grid-row:1;justify-self:start}
+#authBtn{grid-column:3;grid-row:1;justify-self:end}
+body:not(.quiz-active) #homeBtn{visibility:hidden!important;display:block!important}
+body.quiz-active #homeBtn{visibility:visible!important}
+#compactBrand{display:none!important}
+.spell-preview{font-size:clamp(38px,8vw,56px)!important;letter-spacing:.19em!important;line-height:1.3!important;min-height:1.45em;margin:8px 0 10px!important;color:#536982!important}
+#spellInput{margin-top:0!important;font-size:20px!important;letter-spacing:.1em!important}
+#spellArea label{display:block;margin-bottom:7px}
+.watermark-layer span{font-size:clamp(40px,7.2vw,92px)!important;letter-spacing:.11em!important;opacity:.085!important;color:#d889a1!important}
+.watermark-layer span:nth-child(1){top:8%;left:-4%;transform:rotate(-17deg)}
+.watermark-layer span:nth-child(2){top:34%;right:-10%;transform:rotate(-17deg)}
+.watermark-layer span:nth-child(3){top:63%;left:1%;transform:rotate(-17deg)}
+.watermark-layer span:nth-child(4){top:91%;right:5%;transform:rotate(-17deg)}
+button,button.secondary{background:#ffe5ec!important;color:#536982!important;border-color:#f4c3d1!important}
+nav button.active,button.active,.options button.selected{background:#dce5ef!important;border-color:#9fb2c8!important;color:#354b63!important}
+button:disabled{opacity:.5}
+.history-delete{min-width:62px;flex:0 0 auto}
+@media(max-width:520px){.topbar{padding-left:10px!important;padding-right:10px!important}.topBrand{font-size:11px;letter-spacing:.1em}.spell-preview{font-size:clamp(34px,10vw,44px)!important;letter-spacing:.13em!important}.spell-note{display:inline-block;font-size:12px!important;font-weight:400!important;color:#a0a7b2!important;letter-spacing:0!important;margin-left:4px;vertical-align:middle}.watermark-layer span{font-size:clamp(30px,8vw,48px)!important;letter-spacing:.06em!important;opacity:.08!important}.watermark-layer span:nth-child(1){top:9%;left:-13%}.watermark-layer span:nth-child(2){top:37%;right:-23%}.watermark-layer span:nth-child(3){top:67%;left:-8%}.watermark-layer span:nth-child(4){top:91%;right:-11%}}
+
+#timerMenuBtn{grid-column:3;grid-row:1;justify-self:end;margin-right:49px}#guestConfirmTitle+ p strong{color:#d62839!important}#guestContinue{background:#d62839!important;color:white!important;border:1px solid #b91e35!important}.guest-secondary{background:#fff1f3!important;color:#536982!important;border:1px solid #f0c8d3!important}#listContent .alpha-wrap{background:#fff8df;border:1px solid #f0dfaa;border-radius:12px;padding:8px;margin:8px 0}#listContent .alpha-wrap .alpha-index{display:flex;flex-wrap:wrap;gap:4px;margin-top:7px}#listContent .alpha-index button{min-width:0;min-height:36px;padding:4px!important;border-radius:9px!important;background:#ffe5ec!important;color:#536982!important;border:1px solid #f4c3d1!important}.#spellHint{white-space:nowrap;overflow-x:auto;max-width:100%;font-size:clamp(16px,5vw,40px)!important;letter-spacing:.035em!important;line-height:1.25!important;min-height:1.25em!important;overflow-wrap:anywhere}.modal-overlay{position:fixed;inset:0;z-index:2000;background:#20283bb8;display:flex;align-items:center;justify-content:center;padding:14px}.modal-card{width:min(100%,430px);background:#fffdf6;border:2px solid #f1dba8;border-radius:20px;padding:18px;box-shadow:0 14px 40px rgba(32,40,59,.24)}
+
+.timer-head{display:flex;align-items:center;justify-content:space-between;gap:10px}.timer-head h2{margin:0}.timer-x{width:38px;height:38px;flex:0 0 38px;border-radius:50%;padding:0;background:#fff0c7;color:#536982;border:1px solid #eed7b2}.timer-panel{padding:12px}.timer-meta{color:#7a8698;font-size:12px}.wheel-stack{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;padding:12px;background:#fffaf1;border:1px solid #f0e0ba;border-radius:14px}.wheel-column{display:flex;flex-direction:column;align-items:center;gap:8px}.wheel-column label{font-size:12px;color:#7d8796}.wheel{height:170px;overflow-y:auto;scroll-snap-type:y mandatory;border:1px solid #e7d7ab;border-radius:12px;background:#fff;box-shadow:inset 0 1px 0 #fff;padding:8px 0}.wheel-item{height:42px;display:flex;align-items:center;justify-content:center;scroll-snap-align:center;font-size:19px;font-weight:700;color:#536982;background:transparent;border-radius:8px}.wheel-item.active{background:#ffe5ec;border:1px solid #f0c4d2}.wheel::-webkit-scrollbar{width:0;height:0}.mini-timer{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:7px 10px;background:#fff9e4;border:1px solid #f3dca0;border-radius:12px;box-shadow:0 8px 22px rgba(90,76,48,.09)}.mini-timer strong{font-size:clamp(18px,4vw,26px);font-variant-numeric:tabular-nums;color:#536982}.mini-actions{display:flex;gap:6px}.mini-actions button{min-height:32px;padding:5px 9px;border-radius:9px!important}.pause-btn,.reset-btn{background:#fff0f2!important;border-color:#efc5d3!important}#relaxBatchBtn{position:absolute;z-index:25;top:62px;right:14px;padding:9px 14px!important;border-radius:999px!important;background:#fff0c7!important;color:#536982!important;border:1px solid #e8d39b!important;box-shadow:0 8px 18px rgba(73,67,53,.08)}
+#homeBtn{white-space:nowrap!important;display:inline-flex;align-items:center;justify-content:center;gap:2px;letter-spacing:-.02em}
+#nextBtn{margin-left:auto!important;display:block}
+#quizPanel>.row:has(#nextBtn){display:flex;justify-content:flex-end;align-items:center}
+#showMeaningBtn{display:none!important}
+#timerMenuBtn{font-size:20px}
+.mini-timer{position:relative;top:auto;margin:8px 0 12px auto;width:min(300px,100%);flex-wrap:nowrap}
+.mini-actions{flex-shrink:0}
+@media(max-width:420px){.mini-timer{gap:5px;padding:6px}.mini-timer strong{font-size:17px}.mini-actions button{padding:4px 6px;font-size:11px}.home-link{padding:5px 6px;font-size:11px}}
+</style>
+</head>
+<body>
+<div class="watermark-layer" aria-hidden="true"><span>IDA UTOPIA</span><span>IDA UTOPIA</span><span>IDA UTOPIA</span><span>IDA UTOPIA</span></div>
+<div class="topbar"><button id="homeBtn" class="home-link">〈 回到首頁</button><div id="topBrand">IDA ENGLISH UTOPIA</div><button id="timerMenuBtn" class="gear-btn" aria-label="時間管理大師">⏰</button><button id="authBtn" class="gear-btn" aria-label="使用者登入">⚙️</button></div>
+<main>
+<header>
+<h1>IDA學測英文之屌逼逼自創網頁 <span class="title-face">&gt;^ω^&lt;</span></h1>
+<p class="sub">中等偏難版｜高中英文第 3～6 級詞彙・三種測驗・45 題防重複</p>
+</header>
+<section class="stats">
+<div class="stat"><span>本輪答對</span><strong id="correctCount">0</strong></div>
+<div class="stat"><span>本輪作答</span><strong id="answeredCount">0</strong></div>
+<div class="stat"><span>正確率</span><strong id="accuracy">0%</strong></div>
+</section>
+<nav>
+<button id="startBtn">英文選中文</button><button class="secondary" id="zhEnBtn">依中文選���文</button><button class="secondary" id="spellBtn">拼字測驗</button><button class="secondary" id="wrongBtn">錯題庫</button><button class="secondary" id="allBtn">單字總表</button><button class="secondary" id="relaxBtn">RELAX</button></nav>
+<p id="dictionaryStatus" class="small">正在準備中文釋義資料……首次開啟需要連線載入。</p>
+<section class="panel home-dashboard" id="homePanel">
+  <div class="dashboard-grid">
+    <div class="countdown-card"><span class="label">學測倒數</span><span class="small">116學測 2027-1-22</span><strong class="exam-days"><span id="examDays">94</span> 天</strong><span class="small exam-clock" id="examClock">00 小時 00 分 00 秒</span></div>
+    <div class="clock-card"><span class="label">北京時間</span><strong id="beijingClock">載入中…</strong><span class="small">UTC+8</span></div>
+    <div class="clock-card"><span class="label">台灣日期</span><strong id="taiwanDate">載入中…</strong><span class="small">Asia/Taipei</span></div>
+  </div>
+  <div class="quote-card"><p class="quote-zh">「不積跬步，無以至千里。」</p><p class="quote-en">A journey of a thousand miles begins with a single step.</p><span class="small">每天多做一點，差距就會慢慢變大。</span></div>
+  <div class="quote-card"><p class="quote-zh">「成功是每天努力一點點的累積。」</p><p class="quote-en">Success is the sum of small efforts, repeated day in and day out.</p></div>
+  <div class="quote-card"><p class="quote-zh">「相信自己，你比想像中更有能力。」</p><p class="quote-en">Believe in yourself. You are more capable than you think.</p></div>
+</section>
+<section class="panel hidden" id="quizPanel"><div class="row" style="justify-content:space-between"><span class="label" id="categoryLabel">準備開始</span><button class="secondary" id="favoriteBtn" style="display:none">☆ 收藏</button></div>
+<div id="spellArea" class="hidden" style="margin-top:14px"><div id="spellHint" class="spell-preview" aria-live="polite"></div><label for="spellInput" class="label">輸入英文拼字</label><input id="spellInput" type="text" autocomplete="off" spellcheck="false" maxlength="32" placeholder="請輸入完整拼字"></div>
+<div class="word-panel"><div class="label" id="wordType">單字</div><div id="word" class="word">準備開始</div><div id="pron" class="pron"></div><div id="meaning" class="meaning hidden"></div></div>
+<div id="options" class="options" aria-live="polite"></div>
+<div class="feedback hidden" id="feedback" aria-live="polite"></div>
+<div id="errorActions" class="hidden panel" style="background:#fff8e6"><strong>這題答錯了，請選擇：</strong><div class="row" style="margin-top:10px"><button type="button" id="errorKnow">我知道這題</button><button class="secondary" type="button" id="errorDontKnow">就是不會</button></div></div>
+<div class="row" style="margin-top:14px;justify-content:flex-end"><button class="secondary" id="nextBtn" type="button" disabled>下一題</button></div></section>
+<section class="panel hidden" id="listPanel"><div class="row" style="justify-content:space-between"><h2 id="listTitle" style="margin:0;color:var(--navy)">單字總表</h2><button class="secondary" id="listBackBtn">回列表</button></div><div id="listContent"></div></section>
+<div id="homeConfirmOverlay" class="hidden" role="dialog" aria-modal="true" aria-labelledby="homeConfirmTitle"><div class="confirm-card"><h2 id="homeConfirmTitle">是否回到首頁？</h2><p>目前進度會保留在此頁，離開後可再回來繼續。</p><div class="row" style="justify-content:center;gap:8px;margin-top:14px"><button id="homeConfirmYes">是</button><button class="secondary" id="homeConfirmNo">否</button></div></div></div>
+<div id="guestConfirmOverlay" class="hidden" role="dialog" aria-modal="true" aria-labelledby="guestConfirmTitle"><div class="confirm-card"><h2 id="guestConfirmTitle">確定不登入嗎？</h2><p>你的資料不會被儲存喔！！<br><strong>強烈建議登入</strong></p><div class="confirm-actions row" style="justify-content:center;gap:8px;margin-top:14px"><button id="guestContinue">訪客身分開始測驗</button><button class="secondary" id="guestLogin">登入</button></div></div></div>
+<div id="authOverlay" class="auth-overlay hidden" role="dialog" aria-modal="true" aria-labelledby="authTitle"><div class="auth-modal"><button class="secondary auth-close" id="authClose" aria-label="關閉">✕</button><div id="authContent"></div></div></div>
+<div id="timerOverlay" class="modal-overlay hidden" role="dialog" aria-modal="true"><div class="modal-card"><div class="timer-head"><h2>⏰ 時間管理大師</h2><button type="button" id="timerExit" class="timer-x" aria-label="關閉計時器">✕</button></div><div id="timerMenu" class="timer-panel"><div class="timer-meta">選擇一種計時方式，適合做 3～5 題短練習。</div><div class="row" style="margin-top:12px;gap:8px;flex-wrap:wrap"><button type="button" data-quiz="en-zh">英文→中文</button><button type="button" data-quiz="zh-en">中文→英文</button><button type="button" data-quiz="spell">拼字</button></div></div><div id="stopwatchSetup" class="timer-panel hidden"><div class="timer-meta">碼錶：記錄目前練習時間。</div><div class="row" style="justify-content:center;margin-top:12px"><button type="button" id="stopwatchStart">開始</button><button type="button" class="secondary" id="stopwatchStop">停止</button><button type="button" class="secondary" id="stopwatchReset">重置</button></div><div class="panel" style="margin-top:12px"><div class="small">目前時間</div><div id="stopwatchDisplay" style="font-size:clamp(28px,6vw,42px);font-weight:900;color:var(--navy);font-variant-numeric:tabular-nums;letter-spacing:0.08em;">000:00:00</div></div></div><div id="countdownSetup" class="timer-panel hidden"><div class="timer-meta">倒數：設定總時長後開始。</div><div class="wheel-stack"><div class="wheel-column"><label>小時</label><div id="hourWheel" class="wheel"></div></div><div class="wheel-column"><label>分鐘</label><div id="minuteWheel" class="wheel"></div></div><div class="wheel-column"><label>秒</label><div id="secondWheel" class="wheel"></div></div></div><div class="row" style="justify-content:center;margin-top:12px;gap:8px;flex-wrap:wrap"><button type="button" id="countdownStart">開始倒數</button><button type="button" class="secondary" id="countdownPause">暫停</button><button type="button" class="secondary" id="countdownReset">重置</button></div><div class="panel" style="margin-top:12px"><div class="small">剩餘時間</div><div id="countdownDisplay" style="font-size:clamp(28px,6vw,42px);font-weight:900;color:var(--navy);font-variant-numeric:tabular-nums;letter-spacing:0.08em;">00:00:00</div></div></div></div></div>
+<div id="relaxPanel" class="panel hidden" style="margin-top:16px;position:relative"><button id="relaxBatchBtn" type="button" aria-label="重新開始 RELAX">重新開始 ↻</button><canvas id="relaxCanvas" width="800" height="500"></canvas><div id="relaxMeaning" class="hidden"></div></div>
+<footer>IDA English Utopia © 2027 · Keep calm and keep learning.</footer>
+</main>
+<script>
+const words = [{"w":"border","p":"","m":"邊界；邊境","c":"114","e":"","t":"","x":"來源：114 學測單字詞庫。請依題目中的詞性與中文釋義作答。","pos":"n.","qtype":"meaning"},{"w":"bore","p":"","m":"令人厭煩；使厭煩","c":"115","e":"","t":"","x":"來源：115 學測單字詞庫。請依題目中的詞性與中文釋義作答。","pos":"v.","qtype":"meaning"},{"w":"bored","p":"","m":"厭煩的；無聊的","c":"114/115","e":"","t":"","x":"","pos":"adj.","qtype":"meaning"},{"w":"boring","p":"","m":"令人厭煩的；無聊的","c":"114/115","e":"","t":"","x":"","pos":"adj.","qtype":"meaning"},{"w":"borrow","p":"","m":"借入；借用","c":"114/115","e":"","t":"","x":"","pos":"v.","qtype":"meaning"},{"w":"brief","p":"","m":"短暫的；簡短的","c":"114/115","e":"","t":"","x":"","pos":"adj.","qtype":"meaning"},{"w":"broaden","p":"","m":"擴大；拓寬","c":"115","e":"","t":"","x":"","pos":"v.","qtype":"meaning"},{"w":"budget","p":"","m":"預算；經費","c":"114/115","e":"","t":"","x":"","pos":"n.","qtype":"meaning"},{"w":"capture","p":"","m":"捕捉；記錄","c":"114","e":"","t":"","x":"","pos":"v.","qtype":"meaning"},{"w":"career","p":"","m":"職業生涯；事業","c":"114/115","e":"","t":"","x":"","pos":"n.","qtype":"meaning"},{"w":"cease","p":"","m":"停止；終止","c":"115","e":"","t":"","x":"","pos":"v.","qtype":"meaning"},{"w":"ceremony","p":"","m":"儀式；典禮","c":"114/115","e":"","t":"","x":"","pos":"n.","qtype":"meaning"},{"w":"challenging","p":"","m":"富挑戰性的；艱難的","c":"115","e":"","t":"","x":"","pos":"adj.","qtype":"meaning"},{"w":"charm","p":"","m":"魅力；吸引力","c":"114/115","e":"","t":"","x":"","pos":"n.","qtype":"meaning"},{"w":"cheerful","p":"","m":"開朗的；快樂的","c":"114/115","e":"","t":"","x":"","pos":"adj.","qtype":"meaning"},{"w":"citizen","p":"","m":"公民；市民","c":"114/115","e":"","t":"","x":"","pos":"n.","qtype":"meaning"},{"w":"classic","p":"","m":"經典的；古典的","c":"114/115","e":"","t":"","x":"","pos":"adj.","qtype":"meaning"},{"w":"climate","p":"","m":"氣候","c":"114/115","e":"","t":"","x":"","pos":"n.","qtype":"meaning"},{"w":"coastal","p":"","m":"沿海的；海岸的","c":"114/115","e":"","t":"","x":"","pos":"adj.","qtype":"meaning"},{"w":"combine","p":"","m":"結合；合併","c":"114/115","e":"","t":"","x":"","pos":"v.","qtype":"meaning"},{"w":"comfort","p":"","m":"安慰；舒適","c":"114/115","e":"","t":"","x":"","pos":"n.","qtype":"meaning"},{"w":"common","p":"","m":"常見的；共同的","c":"114/115","e":"","t":"","x":"","pos":"adj.","qtype":"meaning"},{"w":"compete","p":"","m":"競爭；比賽","c":"114/115","e":"","t":"","x":"","pos":"v.","qtype":"meaning"},{"w":"compose","p":"","m":"作曲；組成；撰寫","c":"114/115","e":"","t":"","x":"","pos":"v.","qtype":"meaning"},{"w":"confident","p":"","m":"自信的；有把握的","c":"114/115","e":"","t":"","x":"","pos":"adj.","qtype":"meaning"},{"w":"contribute","p":"","m":"貢獻；投稿","c":"114/115","e":"","t":"","x":"","pos":"v.","qtype":"meaning"},{"w":"convince","p":"","m":"說服；使相信","c":"114/115","e":"","t":"","x":"","pos":"v.","qtype":"meaning"},{"w":"cooperate","p":"","m":"合作；協力","c":"114/115","e":"","t":"","x":"","pos":"v.","qtype":"meaning"},{"w":"crisis","p":"","m":"危機","c":"114/115","e":"","t":"","x":"","pos":"n.","qtype":"meaning"},{"w":"culture","p":"","m":"文化","c":"114/115","e":"","t":"","x":"","pos":"n.","qtype":"meaning"},{"w":"decrease","p":"","m":"減少；降低","c":"114/115","e":"","t":"","x":"","pos":"v.","qtype":"meaning"},{"w":"delicate","p":"","m":"精緻的；脆弱的","c":"114/115","e":"","t":"","x":"","pos":"adj.","qtype":"meaning"},{"w":"demand","p":"","m":"需求；要求","c":"114/115","e":"","t":"","x":"","pos":"n./v.","qtype":"meaning"},{"w":"deserve","p":"","m":"應得；值得","c":"114/115","e":"","t":"","x":"","pos":"v.","qtype":"meaning"},{"w":"device","p":"","m":"裝置；設備","c":"114/115","e":"","t":"","x":"","pos":"n.","qtype":"meaning"},{"w":"difficult","p":"","m":"困難的","c":"114/115","e":"","t":"","x":"","pos":"adj.","qtype":"meaning"},{"w":"discover","p":"","m":"發現","c":"115","e":"","t":"","x":"","pos":"v.","qtype":"meaning"},{"w":"disturb","p":"","m":"打擾；使不安","c":"114/115","e":"","t":"","x":"","pos":"v.","qtype":"meaning"},{"w":"earnest","p":"","m":"認真的；誠摯的","c":"115","e":"","t":"","x":"","pos":"adj.","qtype":"meaning"},{"w":"eastern","p":"","m":"東方的","c":"114/115","e":"","t":"","x":"","pos":"adj.","qtype":"meaning"},{"w":"eco-friendly","p":"","m":"環保的；生態友善的","c":"115","e":"","t":"","x":"","pos":"adj.","qtype":"meaning"},{"w":"economic","p":"","m":"經濟的","c":"114/115","e":"","t":"","x":"","pos":"adj.","qtype":"meaning"},{"w":"educate","p":"","m":"教育；培養","c":"114/115","e":"","t":"","x":"","pos":"v.","qtype":"meaning"},{"w":"effort","p":"","m":"努力；盡力","c":"114/115","e":"","t":"","x":"","pos":"n.","qtype":"meaning"},{"w":"emotion","p":"","m":"情緒；感情","c":"114/115","e":"","t":"","x":"","pos":"n.","qtype":"meaning"},{"w":"encourage","p":"","m":"鼓勵；激勵","c":"114/115","e":"","t":"","x":"","pos":"v.","qtype":"meaning"},{"w":"entire","p":"","m":"整個的；全部的","c":"114/115","e":"","t":"","x":"","pos":"adj.","qtype":"meaning"},{"w":"equally","p":"","m":"同樣地；平等地","c":"115","e":"","t":"","x":"","pos":"adv.","qtype":"meaning"},{"w":"estimate","p":"","m":"估計；評估","c":"114/115","e":"","t":"","x":"","pos":"v.","qtype":"meaning"},{"w":"eventually","p":"","m":"最終；最後","c":"114/115","e":"","t":"","x":"","pos":"adv.","qtype":"meaning"},{"w":"evidence","p":"","m":"證據；憑據","c":"114/115","e":"","t":"","x":"","pos":"n.","qtype":"meaning"},{"w":"expand","p":"","m":"擴展；擴大","c":"114/115","e":"","t":"","x":"","pos":"v.","qtype":"meaning"},{"w":"expert","p":"","m":"專家；熟練者","c":"114/115","e":"","t":"","x":"","pos":"n.","qtype":"meaning"},{"w":"explain","p":"","m":"解釋；說明","c":"114/115","e":"","t":"","x":"","pos":"v.","qtype":"meaning"},{"w":"faithful","p":"","m":"忠誠的；可靠的","c":"115","e":"","t":"","x":"","pos":"adj.","qtype":"meaning"},{"w":"familiar","p":"","m":"熟悉的；常見的","c":"114/115","e":"","t":"","x":"","pos":"adj.","qtype":"meaning"},{"w":"favorite","p":"","m":"最喜歡的；特別喜愛的","c":"114/115","e":"","t":"","x":"","pos":"adj./n.","qtype":"meaning"},{"w":"flexible","p":"","m":"靈活的；可變動的","c":"114/115","e":"","t":"","x":"","pos":"adj.","qtype":"meaning"},{"w":"focus","p":"","m":"焦點；集中注意力","c":"114/115","e":"","t":"","x":"","pos":"n./v.","qtype":"meaning"},{"w":"forbid","p":"","m":"禁止；不准","c":"114/115","e":"","t":"","x":"","pos":"v.","qtype":"meaning"},{"w":"frequent","p":"","m":"頻繁的；常見的","c":"114/115","e":"","t":"","x":"","pos":"adj.","qtype":"meaning"},{"w":"friendly","p":"","m":"友善的；友好的","c":"114/115","e":"","t":"","x":"","pos":"adj.","qtype":"meaning"},{"w":"frustrate","p":"","m":"使沮喪；使挫敗","c":"114/115","e":"","t":"","x":"","pos":"v.","qtype":"meaning"},{"w":"generation","p":"","m":"世代；一代人","c":"114/115","e":"","t":"","x":"","pos":"n.","qtype":"meaning"},{"w":"genuine","p":"","m":"真正的；誠實的","c":"115","e":"","t":"","x":"","pos":"adj.","qtype":"meaning"},{"w":"glorious","p":"","m":"光榮的；壯麗的","c":"115","e":"","t":"","x":"","pos":"adj.","qtype":"meaning"},{"w":"gradual","p":"","m":"逐漸的；緩慢的","c":"114/115","e":"","t":"","x":"","pos":"adj.","qtype":"meaning"},{"w":"harmony","p":"","m":"和諧；協調","c":"114/115","e":"","t":"","x":"","pos":"n.","qtype":"meaning"},{"w":"horrible","p":"","m":"可怕的；極糟的","c":"114/115","e":"","t":"","x":"","pos":"adj.","qtype":"meaning"},{"w":"improve","p":"","m":"改善；提高","c":"114/115","e":"","t":"","x":"","pos":"v.","qtype":"meaning"},{"w":"indicate","p":"","m":"指出；顯示","c":"114/115","e":"","t":"","x":"","pos":"v.","qtype":"meaning"},{"w":"influence","p":"","m":"影響；影響力","c":"114/115","e":"","t":"","x":"","pos":"n./v.","qtype":"meaning"},{"w":"intense","p":"","m":"強烈的；劇烈的","c":"114/115","e":"","t":"","x":"","pos":"adj.","qtype":"meaning"},{"w":"invent","p":"","m":"發明；創造","c":"114/115","e":"","t":"","x":"","pos":"v.","qtype":"meaning"},{"w":"issue","p":"","m":"問題；議題","c":"114/115","e":"","t":"","x":"","pos":"n.","qtype":"meaning"},{"w":"justify","p":"","m":"證明……合理；辯解","c":"115","e":"","t":"","x":"","pos":"v.","qtype":"meaning"},{"w":"labor","p":"","m":"勞動；勞力","c":"114/115","e":"","t":"","x":"","pos":"n.","qtype":"meaning"},{"w":"limited","p":"","m":"有限的；受限的","c":"114/115","e":"","t":"","x":"","pos":"adj.","qtype":"meaning"},{"w":"locate","p":"","m":"位於；找到","c":"114/115","e":"","t":"","x":"","pos":"v.","qtype":"meaning"},{"w":"mature","p":"","m":"成熟的；成年人的","c":"114/115","e":"","t":"","x":"","pos":"adj.","qtype":"meaning"},{"w":"measure","p":"","m":"測量；措施","c":"114/115","e":"","t":"","x":"","pos":"n./v.","qtype":"meaning"},{"w":"memorize","p":"","m":"記住；背熟","c":"114/115","e":"","t":"","x":"","pos":"v.","qtype":"meaning"},{"w":"mental","p":"","m":"精神的；心理的","c":"114/115","e":"","t":"","x":"","pos":"adj.","qtype":"meaning"},{"w":"motive","p":"","m":"動機；目的","c":"114/115","e":"","t":"","x":"","pos":"n.","qtype":"meaning"},{"w":"nation","p":"","m":"國家；民族","c":"114/115","e":"","t":"","x":"","pos":"n.","qtype":"meaning"},{"w":"native","p":"","m":"當地的；本地的","c":"114/115","e":"","t":"","x":"","pos":"adj.","qtype":"meaning"},{"w":"obvious","p":"","m":"明顯的；顯而易見的","c":"114/115","e":"","t":"","x":"","pos":"adj.","qtype":"meaning"},{"w":"opportunity","p":"","m":"機會；良機","c":"114/115","e":"","t":"","x":"","pos":"n.","qtype":"meaning"},{"w":"organize","p":"","m":"組織；安排","c":"114/115","e":"","t":"","x":"","pos":"v.","qtype":"meaning"},{"w":"peaceful","p":"","m":"和平的；安靜的","c":"114/115","e":"","t":"","x":"","pos":"adj.","qtype":"meaning"},{"w":"permits","p":"","m":"許可；准許","c":"115","e":"","t":"","x":"","pos":"n./v.","qtype":"meaning"},{"w":"polite","p":"","m":"有禮貌的；客氣的","c":"114/115","e":"","t":"","x":"","pos":"adj.","qtype":"meaning"},{"w":"positive","p":"","m":"正面的；積極的","c":"114/115","e":"","t":"","x":"","pos":"adj.","qtype":"meaning"},{"w":"prepare","p":"","m":"準備","c":"114/115","e":"","t":"","x":"","pos":"v.","qtype":"meaning"},{"w":"prevent","p":"","m":"防止；阻止","c":"114/115","e":"","t":"","x":"","pos":"v.","qtype":"meaning"},{"w":"private","p":"","m":"私人的；秘密的","c":"114/115","e":"","t":"","x":"","pos":"adj.","qtype":"meaning"},{"w":"process","p":"","m":"過程；處理","c":"114/115","e":"","t":"","x":"","pos":"n./v.","qtype":"meaning"},{"w":"produce","p":"","m":"生產；製造","c":"114/115","e":"","t":"","x":"","pos":"v.","qtype":"meaning"},{"w":"profit","p":"","m":"利潤；利益","c":"114/115","e":"","t":"","x":"","pos":"n.","qtype":"meaning"},{"w":"property","p":"","m":"財產；特性","c":"114/115","e":"","t":"","x":"","pos":"n.","qtype":"meaning"},{"w":"protect","p":"","m":"保護","c":"114/115","e":"","t":"","x":"","pos":"v.","qtype":"meaning"},{"w":"purpose","p":"","m":"目的；意圖","c":"114/115","e":"","t":"","x":"","pos":"n.","qtype":"meaning"},{"w":"quality","p":"","m":"品質；特質","c":"114/115","e":"","t":"","x":"","pos":"n.","qtype":"meaning"},{"w":"rapid","p":"","m":"迅速的；快速的","c":"115","e":"","t":"","x":"","pos":"adj.","qtype":"meaning"},{"w":"realize","p":"","m":"意識到；實現","c":"114/115","e":"","t":"","x":"","pos":"v.","qtype":"meaning"},{"w":"reason","p":"","m":"理由；原因","c":"114/115","e":"","t":"","x":"","pos":"n.","qtype":"meaning"},{"w":"reduce","p":"","m":"減少；降低","c":"114/115","e":"","t":"","x":"","pos":"v.","qtype":"meaning"},{"w":"reflect","p":"","m":"反映；反思","c":"114/115","e":"","t":"","x":"","pos":"v.","qtype":"meaning"},{"w":"reliable","p":"","m":"可靠的；可信賴的","c":"114/115","e":"","t":"","x":"","pos":"adj.","qtype":"meaning"},{"w":"require","p":"","m":"需要；要求","c":"114/115","e":"","t":"","x":"","pos":"v.","qtype":"meaning"},{"w":"resource","p":"","m":"資源；材料","c":"114/115","e":"","t":"","x":"","pos":"n.","qtype":"meaning"},{"w":"respect","p":"","m":"尊重；敬重","c":"114/115","e":"","t":"","x":"","pos":"n./v.","qtype":"meaning"},{"w":"responsible","p":"","m":"負責任的；可靠的","c":"114/115","e":"","t":"","x":"","pos":"adj.","qtype":"meaning"},{"w":"separate","p":"","m":"分開的；區分","c":"114/115","e":"","t":"","x":"","pos":"adj./v.","qtype":"meaning"},{"w":"serious","p":"","m":"嚴重的；認真的","c":"114/115","e":"","t":"","x":"","pos":"adj.","qtype":"meaning"},{"w":"significant","p":"","m":"重要的；顯著的","c":"114/115","e":"","t":"","x":"","pos":"adj.","qtype":"meaning"},{"w":"sincere","p":"","m":"真誠的；誠摯的","c":"114/115","e":"","t":"","x":"","pos":"adj.","qtype":"meaning"},{"w":"situation","p":"","m":"情況；局勢","c":"114/115","e":"","t":"","x":"","pos":"n.","qtype":"meaning"},{"w":"solution","p":"","m":"解決方案；解答","c":"114/115","e":"","t":"","x":"","pos":"n.","qtype":"meaning"},{"w":"special","p":"","m":"特別的；特殊的","c":"114/115","e":"","t":"","x":"","pos":"adj.","qtype":"meaning"},{"w":"specific","p":"","m":"具體的；特定的","c":"114/115","e":"","t":"","x":"","pos":"adj.","qtype":"meaning"},{"w":"support","p":"","m":"支持；支援","c":"114/115","e":"","t":"","x":"","pos":"n./v.","qtype":"meaning"},{"w":"survive","p":"","m":"生存；倖存","c":"114/115","e":"","t":"","x":"","pos":"v.","qtype":"meaning"},{"w":"threat","p":"","m":"威脅；恐嚇","c":"114/115","e":"","t":"","x":"","pos":"n.","qtype":"meaning"},{"w":"traditional","p":"","m":"傳統的；慣例的","c":"114/115","e":"","t":"","x":"","pos":"adj.","qtype":"meaning"},{"w":"travel","p":"","m":"旅行；移動","c":"114/115","e":"","t":"","x":"","pos":"v./n.","qtype":"meaning"},{"w":"unfair","p":"","m":"不公平的；不合理的","c":"114/115","e":"","t":"","x":"","pos":"adj.","qtype":"meaning"},{"w":"valuable","p":"","m":"有價值的；寶貴的","c":"114/115","e":"","t":"","x":"","pos":"adj.","qtype":"meaning"},{"w":"variety","p":"","m":"多樣性；種類","c":"114/115","e":"","t":"","x":"","pos":"n.","qtype":"meaning"},{"w":"victory","p":"","m":"勝利；成功","c":"114/115","e":"","t":"","x":"","pos":"n.","qtype":"meaning"},{"w":"visible","p":"","m":"可見的；明顯的","c":"115","e":"","t":"","x":"","pos":"adj.","qtype":"meaning"},{"w":"welfare","p":"","m":"福利；福祉","c":"114/115","e":"","t":"","x":"","pos":"n.","qtype":"meaning"},{"w":"worry","p":"","m":"擔心；憂慮","c":"114/115","e":"","t":"","x":"","pos":"v./n.","qtype":"meaning"}];
+const mergedWords = [], wordIndex = new Map();
+for (const item of words) {
+  const key = String(item.w || "").trim().toLowerCase();
+  if (!key) continue;
+  if (!wordIndex.has(key)) {
+    wordIndex.set(key, mergedWords.length);
+    mergedWords.push({ ...item });
+  } else {
+    const existing = mergedWords[wordIndex.get(key)];
+    const meanings = String(existing.m || "").split("；");
+    for (const meaning of String(item.m || "").split("；")) {
+      if (meaning && !meanings.includes(meaning)) meanings.push(meaning);
+    }
+    existing.m = meanings.filter(Boolean).join("；");
+    const years = new Set(String(existing.c || "").split("/"));
+    String(item.c || "").split("/").forEach(year => years.add(year));
+    existing.c = [...years].filter(Boolean).join("/");
+    if (item.pos && !String(existing.pos || "").split("/").includes(item.pos)) existing.pos = [existing.pos, item.pos].filter(Boolean).join("/");
+  }
+}
+words.splice(0, words.length, ...mergedWords);
+let knownWords = words.filter(w => w.qtype === "meaning" && w.m);
+let current = null, pool = [], poolIndex = 0, answered = 0, correct = 0, streak = 0, locked = true, mode = "en-zh", pendingError = null, wrongQuizMode = false;
+const $ = id => document.getElementById(id), shuffle = a => [...a].sort(() => Math.random() - 0.5);
+const LEGACY_KEYS = { WrongQuestions: "vocabGardenWrongQuestions", WrongWords: "vocabGardenWrongWords", Marked: "vocabGardenMarked", Fav: "vocabGardenFav", History: "vocabGardenHistory", RecentWords: "vocabGardenRecentWords" };
+let activeAccountId = localStorage.getItem("vocabGardenActiveAccount") || "guest";
+let accounts = []; try { accounts = JSON.parse(localStorage.getItem("vocabGardenAccounts") || "[]") } catch (e) { accounts = []; }
+let currentAccount = accounts.find(a => a.id === activeAccountId) || null;
+if (activeAccountId !== "guest" && !currentAccount) { activeAccountId = "guest"; localStorage.setItem("vocabGardenActiveAccount", "guest"); }
+function dataKey(k) { return "vocabGardenData:" + activeAccountId + ":" + k; }
+function getStore(k, d) {
+  try {
+    let v = localStorage.getItem(dataKey(k));
+    if (v !== null) return JSON.parse(v);
+    if (activeAccountId === "guest" && LEGACY_KEYS[k]) {
+      let old = localStorage.getItem(LEGACY_KEYS[k]);
+      if (old !== null) return JSON.parse(old);
+    }
+    return d;
+  } catch (e) { return d; }
+}
+function setStore(k, v) { if (!currentAccount) return; localStorage.setItem(dataKey(k), JSON.stringify(v)); }
+let wrongQuestions = [], wrongWords = [], marked = [], fav = [], history = [], recentWords = [];
+let guestModeAllowed = false, guestBlocked = false, guestAnsweredThisSession = 0, guestPromptStage = "initial";
+function loadUserData() {
+  if (!currentAccount) { wrongQuestions = []; wrongWords = []; marked = []; fav = []; history = []; recentWords = []; sync(); return; }
+  wrongQuestions = getStore("WrongQuestions", []); wrongWords = getStore("WrongWords", []); marked = getStore("Marked", []); fav = getStore("Fav", []); history = getStore("History", []); recentWords = getStore("RecentWords", []); sync();
+}
+loadUserData();
+function safe(s) { return String(s ?? "").replace(/[&<>\"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c])); }
+function pos(w) { return w.pos || "詞性未標示"; }
+function explain(w) { return w.m || "此單字尚未填入中文釋義。"; }
+function updateStats() {
+  $("correctCount").textContent = correct;
+  $("answeredCount").textContent = answered;
+  $("accuracy").textContent = answered ? Math.round(correct / answered * 100) + "%" : "0%";
+}
+function sync() {
+  if (!currentAccount) return;
+  setStore("WrongQuestions", wrongQuestions);
+  setStore("WrongWords", wrongWords);
+  setStore("Marked", marked);
+  setStore("Fav", fav);
+  setStore("History", history);
+  setStore("RecentWords", recentWords);
+}
+function chooseQuestionPool(base) { if (wrongQuizMode && wrongWords.length) { const all = wrongWords.map(w => knownWords.find(x => x.w === w)).filter(Boolean); return shuffle(all.length ? all : base); } return shuffle(base.slice()); }
+function startQuizCore(m = "en-zh", wrongOnly = false) {
+  if (!currentAccount && (!guestModeAllowed || guestBlocked || guestAnsweredThisSession >= 5)) { showGuestGate(guestBlocked || guestAnsweredThisSession >= 5 ? "limit" : "initial"); return; }
+  mode = m; wrongQuizMode = wrongOnly;
+  document.body.classList.add("quiz-active");
+  $("homePanel").classList.add("hidden");
+  $("quizPanel").classList.remove("hidden");
+  $("listPanel").classList.add("hidden");
+  $("word").textContent = "準備開始";
+  $("pron").textContent = "";
+  $("meaning").classList.add("hidden");
+  $("spellArea").classList.add("hidden");
+  $("feedback").classList.add("hidden");
+  $("errorActions").classList.add("hidden");
+  $("nextBtn").disabled = true;
+  const source = wrongOnly ? knownWords.filter(w => wrongWords.includes(w.w)) : knownWords;
+  pool = source.length ? chooseQuestionPool(source) : shuffle(knownWords.slice());
+  poolIndex = 0; answered = 0; correct = 0; streak = 0; updateStats();
+  nextQuestion();
+}
+function startQuiz(m = "en-zh") { if (currentAccount) { startQuizCore(m); return; } window.pendingQuizMode = m; if (guestBlocked || guestAnsweredThisSession >= 5) { showGuestGate("limit"); return; } if (guestModeAllowed) { startQuizCore(m); return; } showGuestGate("initial"); }
+function nextQuestion() {
+  if (!currentAccount && guestModeAllowed && guestAnsweredThisSession >= 5) { showGuestGate("limit"); $("nextBtn").disabled = true; return; }
+  if (poolIndex >= pool.length) { finishRound(); return; }
+  current = pool[poolIndex++];
+  if (!current) return;
+  locked = false; pendingError = null; $("feedback").classList.add("hidden"); $("errorActions").classList.add("hidden");
+  $("nextBtn").disabled = true;
+  $("options").innerHTML = "";
+  $("spellInput").value = "";
+  $("spellArea").classList.add("hidden");
+  const choices = shuffle(knownWords.filter(w => w.w !== current.w).slice(0, 3)).concat([current]);
+  const options = shuffle(choices.filter(Boolean)).slice(0, 4);
+
+  if (mode === "en-zh") {
+    $("word").textContent = current.w;
+    $("pron").textContent = current.pos || "";
+    $("meaning").textContent = explain(current);
+    $("meaning").classList.remove("hidden");
+    options.forEach(w => { const button = document.createElement("button"); button.type = "button"; button.textContent = w.m || w.w; button.dataset.word = w.w; button.onclick = () => choose(button, w, options); $("options").appendChild(button); });
+  } else if (mode === "zh-en") {
+    $("word").textContent = explain(current);
+    $("pron").textContent = current.pos || "";
+    $("meaning").classList.add("hidden");
+    options.forEach(w => { const button = document.createElement("button"); button.type = "button"; button.textContent = w.w; button.dataset.word = w.w; button.onclick = () => choose(button, w, options); $("options").appendChild(button); });
+  } else {
+    $("word").textContent = "拼字測驗";
+    $("pron").textContent = "請輸入正確英文拼字";
+    $("meaning").classList.add("hidden");
+    $("spellArea").classList.remove("hidden");
+    $("spellInput").focus();
+    $("spellInput").onkeydown = e => { if (e.key === "Enter") { checkSpell(); } };
+    $("spellInput").disabled = false;
+    $("spellInput").value = "";
+    $("spellHint").textContent = current.w;
+    updateSpellPreview();
+  }
+}
+function choose(button, candidate, choices) {
+  if (locked) return;
+  locked = true;
+  const isRight = candidate.w === current.w;
+  record(isRight, candidate.w, choices);
+  Array.from($("options").querySelectorAll("button")).forEach(btn => { btn.disabled = true; if (btn.dataset.word === current.w) btn.classList.add("correct"); if (btn.dataset.word === candidate.w && !isRight) btn.classList.add("wrong"); });
+  if (isRight) { $("feedback").textContent = `✅ 正確！${current.w}：${explain(current)}`; $("feedback").classList.remove("hidden"); $("nextBtn").disabled = false; }
+  else { $("feedback").textContent = `❌ 答錯了！正確答案是：${current.w}（${pos(current)}）${explain(current)}`; $("feedback").classList.remove("hidden"); pendingError = { word: current.w, mode, time: Date.now() }; $("errorActions").classList.remove("hidden"); }
+  button.classList.add(isRight ? "correct" : "wrong");
+}
+function updateSpellPreview() {
+  if (!current || mode !== "spell") return;
+  const typed = $("spellInput").value.trim();
+  if (!typed) { $("spellHint").textContent = current.w; return; }
+  const output = Array.from(current.w).map((ch, i) => typed[i] === ch ? ch : "_").join("");
+  $("spellHint").textContent = output;
+}
+function record(isRight, selected, choices) {
+  answered++;
+  if (isRight) correct++;
+  updateStats();
+  if (!currentAccount && guestModeAllowed) guestAnsweredThisSession++;
+  recentWords = recentWords.filter(x => x !== current.w); recentWords.push(current.w);
+  if (recentWords.length > 20) recentWords.shift();
+  if (!isRight) { wrongQuestions.unshift({ word: current.w, mode, time: Date.now() }); wrongQuestions = wrongQuestions.slice(0, 200); if (!wrongWords.includes(current.w)) wrongWords.unshift(current.w); }
+  if (currentAccount) sync();
+}
+function checkSpell() {
+  if (locked) return;
+  locked = true;
+  const typed = $("spellInput").value.trim();
+  const isRight = typed.toLowerCase() === current.w.toLowerCase();
+  record(isRight, typed, []);
+  $("spellInput").disabled = true;
+  $("feedback").classList.remove("hidden");
+  $("feedback").textContent = isRight ? `✅ 正確！${current.w}：${explain(current)}` : `❌ 答錯了！正確答案是：${current.w}（${pos(current)}）${explain(current)}`;
+  if (!isRight) { pendingError = { word: current.w, mode, time: Date.now() }; $("errorActions").classList.remove("hidden"); }
+  else { $("nextBtn").disabled = false; }
+}
+function finishRound() {
+  $("word").textContent = "🌷 本輪完成！";
+  $("pron").textContent = "你完成了 " + answered + " 題。";
+  $("options").innerHTML = "";
+  $("spellArea").classList.add("hidden");
+  $("feedback").classList.remove("hidden");
+  $("feedback").textContent = `本輪答對 ${correct} / ${answered}，正確率 ${answered ? Math.round(correct / answered * 100) : 0}%`;
+  $("nextBtn").disabled = true;
+  $("errorActions").classList.add("hidden");
+}
+function showGuestGate(stage = "initial") {
+  guestPromptStage = stage;
+  const overlay = $("guestConfirmOverlay");
+  overlay.querySelector("h2").textContent = "確定不登入嗎？";
+  if (stage === "initial") {
+    overlay.querySelector("p").innerHTML = "你的資料不會被儲存喔！！<br><strong>強烈建議登入</strong>";
+    $("guestContinue").textContent = "訪客身分開始測驗（題數限制：5題）";
+    $("guestLogin").textContent = "登入";
+  } else {
+    overlay.querySelector("p").innerHTML = "你的資料不會被儲存喔！！<br><strong>強烈建議登入</strong><br><span class=\"small\">訪客已完成 5 題；若選擇「我再想想」，就會回到首頁。</span>";
+    $("guestContinue").textContent = "我再想想";
+    $("guestLogin").textContent = "登入";
+  }
+  overlay.classList.remove("hidden");
+}
+$("guestContinue").onclick = () => {
+  if (guestPromptStage === "limit") { $("guestConfirmOverlay").classList.add("hidden"); return; }
+  guestModeAllowed = true; guestBlocked = false; guestAnsweredThisSession = 0; $("guestConfirmOverlay").classList.add("hidden"); startQuizCore(window.pendingQuizMode || "en-zh");
+};
+$("guestLogin").onclick = () => { $("guestConfirmOverlay").classList.add("hidden"); openAuth(); showLogin(); };
+function goHome() { document.body.classList.remove("quiz-active"); $("quizPanel").classList.add("hidden"); $("listPanel").classList.add("hidden"); $("homePanel").classList.remove("hidden"); window.scrollTo({ top: 0, behavior: "smooth" }); }
+$("homeBtn").onclick = () => $("homeConfirmOverlay").classList.remove("hidden");
+$("homeConfirmYes").onclick = () => { $("homeConfirmOverlay").classList.add("hidden"); goHome(); };
+$("homeConfirmNo").onclick = () => $("homeConfirmOverlay").classList.add("hidden");
+$("startBtn").onclick = () => startQuiz("en-zh");
+$("zhEnBtn").onclick = () => startQuiz("zh-en");
+$("spellBtn").onclick = () => startQuiz("spell");
+$("nextBtn").onclick = () => nextQuestion();
+$("errorKnow").onclick = () => { $("errorActions").classList.add("hidden"); $("nextBtn").disabled = false; if (pendingError) { pendingError = null; } };
+$("errorDontKnow").onclick = () => { if (pendingError) { wrongQuestions.unshift({ word: pendingError.word, mode: pendingError.mode, time: pendingError.time }); if (!wrongWords.includes(pendingError.word)) wrongWords.unshift(pendingError.word); sync(); pendingError = null; } $("errorActions").classList.add("hidden"); $("nextBtn").disabled = false; };
+function showWrongBank() { document.body.classList.add("quiz-active"); $("homePanel").classList.add("hidden"); $("quizPanel").classList.add("hidden"); $("listPanel").classList.remove("hidden"); $("listTitle").textContent = "錯題庫"; $("listContent").innerHTML = wrongWords.length ? wrongWords.map(w => `<div class="listitem"><strong>${safe(w)}</strong><button class="secondary history-delete" data-word="${safe(w)}">移除</button></div>`).join("") : "<p class=\"small\">目前沒有錯詞。</p>"; $("listContent").querySelectorAll(".history-delete").forEach(btn => btn.onclick = () => { const w = btn.dataset.word; wrongWords = wrongWords.filter(x => x !== w); showWrongBank(); }); }
+$("wrongBtn").onclick = showWrongBank;
+$("allBtn").onclick = () => { document.body.classList.add("quiz-active"); $("homePanel").classList.add("hidden"); $("quizPanel").classList.add("hidden"); $("listPanel").classList.remove("hidden"); $("listTitle").textContent = "單字總表"; const html = knownWords.map(w => `<div class="listitem"><strong>${safe(w.w)}</strong><span class="small">${safe(w.m)}</span></div>`).join(""); $("listContent").innerHTML = html; };
+$("listBackBtn").onclick = () => { goHome(); };
+function updateDashboard() {
+  const now = new Date();
+  try { $("beijingClock").textContent = new Intl.DateTimeFormat("zh-CN", { timeZone: "Asia/Shanghai", hour: "2-digit", minute: "2-digit", second: "2-digit", hour12: false }).format(now); } catch (e) { $("beijingClock").textContent = now.toLocaleTimeString("zh-TW"); }
+  try { $("taiwanDate").textContent = new Intl.DateTimeFormat("zh-TW", { timeZone: "Asia/Taipei", year: "numeric", month: "long", day: "numeric", weekday: "long" }).format(now); } catch (e) { $("taiwanDate").textContent = now.toLocaleDateString("zh-TW"); }
+  const examDate = new Date("2027-01-22T00:00:00+08:00");
+  const ms = Math.max(0, examDate.getTime() - now.getTime());
+  const days = Math.floor(ms / 86400000);
+  const hours = Math.floor((ms % 86400000) / 3600000);
+  const minutes = Math.floor((ms % 3600000) / 60000);
+  const seconds = Math.floor((ms % 60000) / 1000);
+  $("examDays").textContent = days;
+  $("examClock").textContent = String(hours).padStart(2, "0") + " 小時 " + String(minutes).padStart(2, "0") + " 分 " + String(seconds).padStart(2, "0") + " 秒";
+}
+updateDashboard(); setInterval(updateDashboard, 1000);
+function openAuth() { $("authOverlay").classList.remove("hidden"); }
+function closeAuth() { $("authOverlay").classList.add("hidden"); }
+function submitAccount(nick, code, auth) { const account = { id: "acct_" + Date.now().toString(36), nickname: nick, code, auth }; accounts.push(account); localStorage.setItem("vocabGardenAccounts", JSON.stringify(accounts)); activeAccountId = account.id; currentAccount = account; localStorage.setItem("vocabGardenActiveAccount", account.id); loadUserData(); openAuth(); }
+function showRegister() {
+  $("authContent").innerHTML = '<h2 id="authTitle">註冊帳號</h2><label>暱稱</label><input id="regNick" placeholder="輸入暱稱"><label>帳號代碼（2~5字母+數字）</label><input id="regCode" placeholder="例如 ABC12"><label>認證碼（3位數）</label><input id="regAuth" placeholder="例如 123"><div class="auth-actions"><button id="createAccount">建立帳號</button><button class="secondary" id="cancelCreate">取消</button></div>';
+  $("createAccount").onclick = () => { const nick = $("regNick").value.trim(); const code = $("regCode").value.trim(); const auth = $("regAuth").value.trim(); if (!nick || !code || !auth) return alert("請完整填寫資料"); submitAccount(nick, code, auth); closeAuth(); };
+  $("cancelCreate").onclick = () => showLogin();
+}
+function showLogin() {
+  $("authContent").innerHTML = '<h2 id="authTitle">登入</h2><label>暱稱</label><input id="loginNick" placeholder="輸入暱稱"><label>帳號代碼</label><input id="loginCode" placeholder="輸入代碼"><label>認證碼</label><input id="loginAuth" placeholder="輸入 3 位數"><div class="auth-actions"><button id="doLogin">登入</button><button class="secondary" id="goRegister">註冊</button></div>';
+  $("goRegister").onclick = showRegister;
+  $("doLogin").onclick = () => { const nick = $("loginNick").value.trim(); const code = $("loginCode").value.trim(); const auth = $("loginAuth").value.trim(); const account = accounts.find(a => a.nickname === nick && a.code === code && a.auth === auth); if (!account) return alert("登入失敗：帳號或認證碼錯誤"); activeAccountId = account.id; currentAccount = account; localStorage.setItem("vocabGardenActiveAccount", account.id); loadUserData(); closeAuth(); };
+}
+$("authBtn").onclick = openAuth; $("authClose").onclick = closeAuth; $("authOverlay").addEventListener("click", e => { if (e.target === $("authOverlay")) closeAuth(); });
+const localDictionaryStatus = $("dictionaryStatus");
+knownWords = words.filter(w => w.qtype === "meaning" && w.m && /[\u3400-\u9fff]/.test(w.m));
+localDictionaryStatus.textContent = "本機詞庫已載入：" + knownWords.length + " 個單字／片語（來源：你提供的 114、115 學測單字 PDF）。不需要下載外部詞庫。";
+function showList() { document.body.classList.add("quiz-active"); $("homePanel").classList.add("hidden"); $("quizPanel").classList.add("hidden"); $("listPanel").classList.remove("hidden"); }
+const timerMenuBtn = $("timerMenuBtn"); const timerOverlay = $("timerOverlay"); const timerExit = $("timerExit"); const timerMenu = $("timerMenu"); const stopwatchSetup = $("stopwatchSetup"); const countdownSetup = $("countdownSetup"); let timerMode = "stopwatch"; let timerChosen = false; let selectedQuiz = null; let swRun = false; let swStart = 0; let swElapsed = 0; let countdownRun = false; let endTime = 0; let countdownRemaining = 0;
+function formatTimer(ms) { const sec = Math.max(0, Math.ceil(ms / 1000)); const h = Math.floor(sec / 3600), m = Math.floor((sec % 3600) / 60), s = sec % 60; return String(h).padStart(2, "0") + ":" + String(m).padStart(2, "0") + ":" + String(s).padStart(2, "0"); }
+function renderStopwatch() { const total = swRun ? swElapsed + (Date.now() - swStart) : swElapsed; $("stopwatchDisplay").textContent = formatTimer(total); }
+function renderCountdown() { const remain = countdownRun ? Math.max(0, endTime - Date.now()) : countdownRemaining; $("countdownDisplay").textContent = formatTimer(remain); }
+function openTimer() { timerOverlay.classList.remove("hidden"); timerMenu.classList.remove("hidden"); stopwatchSetup.classList.add("hidden"); countdownSetup.classList.add("hidden"); }
+timerMenuBtn.onclick = openTimer; timerExit.onclick = () => timerOverlay.classList.add("hidden");
+document.querySelectorAll("[data-quiz]").forEach(btn => { btn.onclick = () => { selectedQuiz = btn.dataset.quiz; document.querySelectorAll("[data-quiz]").forEach(x => x.classList.toggle("active", x === btn)); timerChosen = true; if (selectedQuiz === "en-zh" || selectedQuiz === "zh-en" || selectedQuiz === "spell") { timerMenu.classList.add("hidden"); if (timerMode === "stopwatch") { stopwatchSetup.classList.remove("hidden"); countdownSetup.classList.add("hidden"); } else { stopwatchSetup.classList.add("hidden"); countdownSetup.classList.remove("hidden"); } } }; });
+$("stopwatchStart").onclick = () => { if (!selectedQuiz) return alert("請先選擇一種測驗，再開始碼錶。"); if (!swRun) { swStart = Date.now(); swRun = true; setInterval(() => { if (swRun) renderStopwatch(); }, 1000); } };
+$("stopwatchStop").onclick = () => { if (swRun) { swElapsed += Date.now() - swStart; swRun = false; renderStopwatch(); } };
+$("stopwatchReset").onclick = () => { swRun = false; swElapsed = 0; swStart = 0; renderStopwatch(); };
+function setDefaultCountdown() { const hour = 0, minute = 5, second = 0; $("hourWheel").dataset.value = hour; $("minuteWheel").dataset.value = minute; $("secondWheel").dataset.value = second; const wheelValue = (id, value) => { const el = $(id); el.innerHTML = ""; for (let i = 0; i <= (id === "hourWheel" ? 99 : 59); i++) { const item = document.createElement("div"); item.className = "wheel-item" + (i === value ? " active" : ""); item.textContent = String(i).padStart(2, "0"); item.onclick = () => { $(id).dataset.value = i; updateWheelStyling(id); }; el.appendChild(item); } }; wheelValue("hourWheel", hour); wheelValue("minuteWheel", minute); wheelValue("secondWheel", second); updateWheelStyling("hourWheel"); updateWheelStyling("minuteWheel"); updateWheelStyling("secondWheel"); }
+function updateWheelStyling(id) { const el = $(id); const value = Number(el.dataset.value || 0); Array.from(el.children).forEach((child, idx) => child.classList.toggle("active", Number(child.textContent) === value)); }
+setDefaultCountdown();
+$("countdownStart").onclick = () => { if (!selectedQuiz) return alert("請先選擇一種測驗，再開始倒數。"); const h = Number($("hourWheel").dataset.value || 0); const m = Number($("minuteWheel").dataset.value || 0); const s = Number($("secondWheel").dataset.value || 0); countdownRemaining = (h * 3600 + m * 60 + s) * 1000; if (countdownRemaining <= 0) return alert("請設定大於 0 的時間。"); endTime = Date.now() + countdownRemaining; countdownRun = true; setInterval(() => { if (countdownRun) renderCountdown(); }, 1000); renderCountdown(); };
+$("countdownPause").onclick = () => { if (countdownRun) { countdownRemaining = Math.max(0, endTime - Date.now()); countdownRun = false; } renderCountdown(); };
+$("countdownReset").onclick = () => { countdownRun = false; countdownRemaining = 0; endTime = 0; renderCountdown(); };
+const relaxBtn = $("relaxBtn"); const relaxPanel = $("relaxPanel"); if (relaxBtn) { relaxBtn.onclick = () => { document.body.classList.add("quiz-active"); $("homePanel").classList.add("hidden"); $("quizPanel").classList.add("hidden"); $("listPanel").classList.add("hidden"); relaxPanel.classList.remove("hidden"); }; }
+$("relaxBatchBtn").onclick = () => { relaxPanel.classList.add("hidden"); goHome(); };
+window.addEventListener("keydown", e => { if (e.key === "Escape") { timerOverlay.classList.add("hidden"); relaxPanel.classList.add("hidden"); } });
+</script>
+</body>
+</html>
